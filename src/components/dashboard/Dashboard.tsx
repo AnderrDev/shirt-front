@@ -13,7 +13,7 @@ interface Camiseta {
 
 const Dashboard: React.FC = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const { camisetas, fetchCamisetas, deleteCamiseta } = useCamisetas();
+  const { camisetas, fetchCamisetas, deleteCamiseta, isLoading } = useCamisetas();
   const [showModal, setShowModal] = useState(false);
   const [selectedCamiseta, setSelectedCamiseta] = useState<Camiseta | null>(null);
 
@@ -47,19 +47,28 @@ const Dashboard: React.FC = () => {
         </button>
       )}
 
-      <CamisetaList
-        camisetas={camisetas}
-        onEdit={handleEdit}
-        onDelete={deleteCamiseta}
-        isAdmin={user.rol === 'Administrador'}
-      />
+      {/* Loader de camisetas */}
+      {isLoading ? (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      ) : (
+        <CamisetaList
+          camisetas={camisetas}
+          onEdit={handleEdit}
+          onDelete={deleteCamiseta}
+          isAdmin={user.rol === 'Administrador'}
+        />
+      )}
 
       {showModal && (
         <CamisetaModal
           show={showModal}
           onClose={() => setShowModal(false)}
           onRefresh={fetchCamisetas}
-          camiseta={selectedCamiseta}  
+          camiseta={selectedCamiseta}
         />
       )}
     </div>

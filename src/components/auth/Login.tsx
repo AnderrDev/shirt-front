@@ -6,10 +6,14 @@ const Login: React.FC = () => {
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
   const [error, setError] = useState('');
-  const [mostrarClave, setMostrarClave] = useState(false); // Estado para mostrar u ocultar la clave
+  const [mostrarClave, setMostrarClave] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Estado para el loader
   const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true); // Activar loader
+    setError(''); // Limpiar errores
     try {
       const formData = new FormData();
       formData.append('usuario', usuario);
@@ -24,7 +28,6 @@ const Login: React.FC = () => {
       navigate('/dashboard');
     } catch (error: any) {
       if (error.response) {
-        // Si el error tiene una respuesta del servidor
         const status = error.response.status;
         if (status === 401) {
           setError('Usuario o clave incorrectos');
@@ -34,17 +37,14 @@ const Login: React.FC = () => {
           setError('Error del servidor. Intenta más tarde.');
         }
       } else if (error.request) {
-        // Si no hay respuesta del servidor
         setError('No se pudo conectar con el servidor. Verifica tu conexión.');
       } else {
-        // Otro tipo de error (e.g., problemas al configurar la solicitud)
         setError('Ocurrió un error inesperado. Intenta de nuevo.');
       }
-
-      console.error('Error en el inicio de sesión:', error);
+    } finally {
+      setIsLoading(false); // Desactivar loader
     }
   };
-
 
   return (
     <div className="container mt-5" style={{ maxWidth: '400px' }}>
@@ -82,7 +82,13 @@ const Login: React.FC = () => {
             </button>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary w-100">Ingresar</button>
+        <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          ) : (
+            'Ingresar'
+          )}
+        </button>
       </form>
       <p className="mt-3 text-center">
         ¿No tienes una cuenta? <Link to="/registro">Regístrate</Link>

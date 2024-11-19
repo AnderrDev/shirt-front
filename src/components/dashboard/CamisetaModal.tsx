@@ -5,7 +5,7 @@ interface Props {
   show: boolean;
   onClose: () => void;
   onRefresh: () => void;
-  camiseta: Camiseta | null; // Recibimos la camiseta directamente
+  camiseta: Camiseta | null;
 }
 
 interface Camiseta {
@@ -18,17 +18,11 @@ interface Camiseta {
 
 const tallasOptions = ['S', 'M', 'L', 'XL'];
 const coloresOptions = [
-  'Rojo',
-  'Azul',
-  'Verde',
-  'Negro',
-  'Amarillo',
-  'Naranja',
-  'Morado',
-  'Cyan',
-  'Magenta',
-  'Gris'
-]; const materialesOptions = ['Algodón', 'Poliéster', 'Lana'];
+  'Rojo', 'Azul', 'Verde', 'Negro',
+  'Amarillo', 'Naranja', 'Morado',
+  'Cyan', 'Magenta', 'Gris'
+];
+const materialesOptions = ['Algodón', 'Poliéster', 'Lana'];
 
 const CamisetaModal: React.FC<Props> = ({ show, onClose, onRefresh, camiseta }) => {
   const [talla, setTalla] = useState('');
@@ -36,6 +30,7 @@ const CamisetaModal: React.FC<Props> = ({ show, onClose, onRefresh, camiseta }) 
   const [material, setMaterial] = useState('');
   const [precio, setPrecio] = useState(0);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Estado para loader
 
   useEffect(() => {
     if (show) {
@@ -56,8 +51,12 @@ const CamisetaModal: React.FC<Props> = ({ show, onClose, onRefresh, camiseta }) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
     if (precio <= 0) {
       setError('El precio debe ser mayor a 0');
+      setIsLoading(false);
       return;
     }
 
@@ -80,6 +79,8 @@ const CamisetaModal: React.FC<Props> = ({ show, onClose, onRefresh, camiseta }) 
     } catch (error) {
       console.error(error);
       setError('Error al guardar la camiseta');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,70 +99,47 @@ const CamisetaModal: React.FC<Props> = ({ show, onClose, onRefresh, camiseta }) 
             <div className="modal-body">
               {error && <div className="alert alert-danger">{error}</div>}
               <form onSubmit={handleSubmit}>
+                {/* Select para Talla */}
                 <div className="mb-3">
                   <label htmlFor="talla" className="form-label">Talla</label>
-                  <select
-                    id="talla"
-                    className="form-select"
-                    value={talla}
-                    onChange={(e) => setTalla(e.target.value)}
-                    required
-                  >
+                  <select id="talla" className="form-select" value={talla} onChange={(e) => setTalla(e.target.value)} required>
                     <option value="">Seleccione una talla</option>
                     {tallasOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
+                      <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
                 </div>
+                {/* Select para Color */}
                 <div className="mb-3">
                   <label htmlFor="color" className="form-label">Color</label>
-                  <select
-                    id="color"
-                    className="form-select"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    required
-                  >
+                  <select id="color" className="form-select" value={color} onChange={(e) => setColor(e.target.value)} required>
                     <option value="">Seleccione un color</option>
                     {coloresOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
+                      <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
                 </div>
+                {/* Select para Material */}
                 <div className="mb-3">
                   <label htmlFor="material" className="form-label">Material</label>
-                  <select
-                    id="material"
-                    className="form-select"
-                    value={material}
-                    onChange={(e) => setMaterial(e.target.value)}
-                    required
-                  >
+                  <select id="material" className="form-select" value={material} onChange={(e) => setMaterial(e.target.value)} required>
                     <option value="">Seleccione un material</option>
                     {materialesOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
+                      <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
                 </div>
+                {/* Input para Precio */}
                 <div className="mb-3">
                   <label htmlFor="precio" className="form-label">Precio</label>
-                  <input
-                    type="number"
-                    id="precio"
-                    className="form-control"
-                    value={precio}
-                    onChange={(e) => setPrecio(parseFloat(e.target.value))}
-                    required
-                  />
+                  <input type="number" id="precio" className="form-control" value={precio} onChange={(e) => setPrecio(parseFloat(e.target.value))} required />
                 </div>
-                <button type="submit" className="btn btn-success w-100">
-                  {camiseta ? 'Actualizar' : 'Guardar'}
+                <button type="submit" className="btn btn-success w-100" disabled={isLoading}>
+                  {isLoading ? (
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  ) : (
+                    camiseta ? 'Actualizar' : 'Guardar'
+                  )}
                 </button>
               </form>
             </div>
