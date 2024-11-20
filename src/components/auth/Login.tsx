@@ -19,7 +19,7 @@ const Login: React.FC = () => {
       formData.append('usuario', usuario);
       formData.append('clave', clave);
 
-      const response = await axios.post('http://18.118.26.128:5000/clientes/login', formData);
+      const response = await axios.post('https://13.58.157.172/clientes/login', formData);
       const { access_token, usuario: userInfo } = response.data;
 
       localStorage.setItem('token', access_token);
