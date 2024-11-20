@@ -26,7 +26,7 @@ const Register: React.FC = () => {
       formData.append('usuario', usuario);
       formData.append('clave', clave);
 
-      await axios.post('http://3.144.86.141:5000/clientes/', formData);
+      await axios.post('http://18.118.26.128:5000/clientes/', formData);
 
       alert('Usuario registrado exitosamente');
       navigate('/');
