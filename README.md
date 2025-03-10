@@ -39,8 +39,118 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+## Project Structure
+
+The project structure is as follows:
+
+```
+/Users/ander/Documents/shirt-front
+├── public
+│   ├── index.html
+│   ├── manifest.json
+│   ├── robots.txt
+│   └── ...
+├── src
+│   ├── components
+│   │   ├── auth
+│   │   │   ├── Login.tsx
+│   │   │   └── Register.tsx
+│   │   ├── dashboard
+│   │   │   ├── ActionButtons.tsx
+│   │   │   ├── CamisetaList.tsx
+│   │   │   ├── CamisetaModal.tsx
+│   │   │   ├── CamisetaSVG.tsx
+│   │   │   └── Dashboard.tsx
+│   │   └── PrivateRoute.tsx
+│   ├── hooks
+│   │   └── useCamisetas.ts
+│   ├── utils
+│   │   └── axiosConfig.ts
+│   ├── App.css
+│   ├── App.test.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   ├── index.tsx
+│   ├── react-app-env.d.ts
+│   ├── reportWebVitals.ts
+│   └── setupTests.ts
+├── .dockerignore
+├── .firebaserc
+├── .gitignore
+├── Dockerfile
+├── firebase.json
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+## Setup Instructions
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/your-username/shirt-front.git
+   cd shirt-front
+   ```
+
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+
+3. **Run the application:**
+   ```sh
+   npm start
+   ```
+
+4. **Build the application for production:**
+   ```sh
+   npm run build
+   ```
+
+## Firebase Hosting
+
+This project uses Firebase Hosting. To deploy the application to Firebase, follow these steps:
+
+1. **Install Firebase CLI:**
+   ```sh
+   npm install -g firebase-tools
+   ```
+
+2. **Login to Firebase:**
+   ```sh
+   firebase login
+   ```
+
+3. **Initialize Firebase in your project:**
+   ```sh
+   firebase init
+   ```
+
+4. **Deploy to Firebase:**
+   ```sh
+   firebase deploy
+   ```
+
+## Docker
+
+This project includes a Dockerfile for containerization. To build and run the Docker container, follow these steps:
+
+1. **Build the Docker image:**
+   ```sh
+   docker build -t shirt-front .
+   ```
+
+2. **Run the Docker container:**
+   ```sh
+   docker run -p 80:80 shirt-front
+   ```
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+For more information on Firebase Hosting, visit the [Firebase Hosting documentation](https://firebase.google.com/docs/hosting).
+
+For more information on Docker, visit the [Docker documentation](https://docs.docker.com/).
